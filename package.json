@@ -1,0 +1,10 @@
+{
+  "name": "neon-siege",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev:server": "cd server && node src/index.js",
+    "dev:client": "cd client && npx vite",
+    "install:all": "cd server && npm install && cd ../client && npm install"
+  }
+}

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Neon Siege</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #000;
+      overflow: hidden;
+      font-family: 'Orbitron', monospace;
+      cursor: crosshair;
+      user-select: none;
+    }
+    #app { width: 100vw; height: 100vh; position: relative; }
+    canvas { display: block; }
+    #hud {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+    }
+    #lobby {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      color: #0ff;
+      text-shadow: 0 0 20px #0ff;
+    }
+    #lobby h1 {
+      font-size: 4rem;
+      font-weight: 900;
+      letter-spacing: 0.2em;
+      margin-bottom: 0.5rem;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    #lobby .subtitle {
+      font-size: 0.9rem;
+      color: #0af;
+      letter-spacing: 0.3em;
+      margin-bottom: 3rem;
+      text-shadow: 0 0 10px #0af;
+    }
+    #lobby input {
+      background: transparent;
+      border: 1px solid #0ff;
+      color: #0ff;
+      font-family: 'Orbitron', monospace;
+      font-size: 1rem;
+      padding: 0.6rem 1.2rem;
+      outline: none;
+      text-align: center;
+      width: 220px;
+      margin-bottom: 1rem;
+      box-shadow: 0 0 10px #0ff4;
+    }
+    #lobby input::placeholder { color: #0ff6; }
+    #lobby .btn {
+      display: block;
+      width: 220px;
+      margin: 0.5rem auto;
+      padding: 0.7rem 1.5rem;
+      background: transparent;
+      border: 1px solid #0ff;
+      color: #0ff;
+      font-family: 'Orbitron', monospace;
+      font-size: 0.85rem;
+      letter-spacing: 0.15em;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 0 8px #0ff3;
+      pointer-events: all;
+    }
+    #lobby .btn:hover {
+      background: #0ff2;
+      box-shadow: 0 0 20px #0ff8;
+    }
+    #lobby .room-row {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+      margin-bottom: 0.5rem;
+    }
+    #lobby .room-row input { width: 140px; margin: 0; }
+    #lobby .room-row .btn { width: 70px; margin: 0; }
+    @keyframes pulse {
+      0%, 100% { text-shadow: 0 0 20px #0ff, 0 0 40px #0ff4; }
+      50% { text-shadow: 0 0 40px #0ff, 0 0 80px #0ff8, 0 0 120px #0ff4; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div id="lobby">
+      <h1>NEON SIEGE</h1>
+      <div class="subtitle">CYBERPUNK ARENA SHOOTER</div>
+      <input id="playerName" type="text" placeholder="ENTER CALLSIGN" maxlength="12" />
+      <button class="btn" id="btnCreate">CREATE ROOM</button>
+      <div class="room-row">
+        <input id="roomCode" type="text" placeholder="ROOM CODE" maxlength="6" />
+        <button class="btn" id="btnJoin">JOIN</button>
+      </div>
+    </div>
+    <div id="hud" style="display:none"></div>
+  </div>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
