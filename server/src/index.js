@@ -11,6 +11,8 @@ const io = new Server(httpServer, {
 
 const rooms = new RoomManager(io)
 
+app.get('/health', (_req, res) => res.json({ status: 'ok' }))
+
 io.on('connection', socket => {
   console.log(`[+] ${socket.id} connected`)
 

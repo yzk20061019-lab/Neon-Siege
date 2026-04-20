@@ -2,7 +2,8 @@ import { io } from 'socket.io-client'
 
 export class SocketClient {
   constructor() {
-    this.socket = io()
+    const serverUrl = import.meta.env.VITE_SERVER_URL || ''
+    this.socket = io(serverUrl)
     this.localId = this.socket.id
     this._handlers = {}
 
