@@ -1,3 +1,7 @@
 {
-  "framework": null
+  "framework": null,
+  "rootDirectory": "client",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "installCommand": "npm install"
 }
