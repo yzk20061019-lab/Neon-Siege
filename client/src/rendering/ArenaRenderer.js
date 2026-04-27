@@ -20,8 +20,11 @@ export class ArenaRenderer {
     scene.add(this.group)
     this._floorMesh = null
     this._wallMesh = null
-    this._reactorMesh = null
-    this._gridLines = null
+    this._reactor = null
+    this._reactorCore = null
+    this._reactorRingA = null
+    this._reactorRingB = null
+    this._reactorPillar = null
     this._paletteIdx = 0
   }
 
@@ -77,34 +80,60 @@ export class ArenaRenderer {
     // 反应堆核心
     const rx = (reactorPos.x + 0.5) * TILE_SIZE
     const rz = (reactorPos.y + 0.5) * TILE_SIZE
-    const reactorGeo = new THREE.OctahedronGeometry(0.8, 1)
-    const reactorMat = new THREE.MeshStandardMaterial({
-      color: 0xffffff,
-      emissive: new THREE.Color(0xffaa00),
-      emissiveIntensity: 3,
-      wireframe: false
-    })
-    this._reactorMesh = new THREE.Mesh(reactorGeo, reactorMat)
-    this._reactorMesh.position.set(rx, 1.2, rz)
-    this.group.add(this._reactorMesh)
 
-    // 反应堆光源
+    this._reactor = new THREE.Group()
+    this._reactor.position.set(rx, 0, rz)
+    this.group.add(this._reactor)
+
+    this._reactorCore = new THREE.Mesh(
+      new THREE.SphereGeometry(0.55, 12, 10),
+      new THREE.MeshStandardMaterial({ color: 0xffffff, emissive: new THREE.Color(0xffaa00), emissiveIntensity: 4, roughness: 0.1, metalness: 0.9 })
+    )
+    this._reactorCore.position.y = 1.4
+    this._reactor.add(this._reactorCore)
+
+    const ringMat = new THREE.MeshStandardMaterial({ color: 0xffcc44, emissive: new THREE.Color(0xff8800), emissiveIntensity: 3, roughness: 0.2, metalness: 1.0 })
+    this._reactorRingA = new THREE.Mesh(new THREE.TorusGeometry(0.85, 0.055, 8, 32), ringMat)
+    this._reactorRingA.position.y = 1.4
+    this._reactor.add(this._reactorRingA)
+
+    this._reactorRingB = new THREE.Mesh(new THREE.TorusGeometry(0.85, 0.055, 8, 32), ringMat.clone())
+    this._reactorRingB.position.y = 1.4
+    this._reactorRingB.rotation.x = Math.PI / 2
+    this._reactor.add(this._reactorRingB)
+
+    this._reactorPillar = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.08, 0.08, 6.0, 8),
+      new THREE.MeshStandardMaterial({ color: 0xffdd88, emissive: new THREE.Color(0xffaa00), emissiveIntensity: 2.5, roughness: 0.0, metalness: 0.0, transparent: true, opacity: 0.55 })
+    )
+    this._reactorPillar.position.y = 3.0
+    this._reactor.add(this._reactorPillar)
+
     const reactorLight = new THREE.PointLight(0xffaa00, 3, 12)
-    reactorLight.position.set(rx, 2, rz)
-    this.group.add(reactorLight)
+    reactorLight.position.y = 2
+    this._reactor.add(reactorLight)
 
     floorGeos.forEach(g => g.dispose())
     wallGeos.forEach(g => g.dispose())
   }
 
   update(dt, reactorHpRatio) {
-    if (this._reactorMesh) {
-      this._reactorMesh.rotation.y += dt * 1.5
-      this._reactorMesh.rotation.x += dt * 0.8
-      // 血量越低，反应堆越狂乱
-      const intensity = 2 + (1 - reactorHpRatio) * 5
-      this._reactorMesh.material.emissiveIntensity = intensity
-    }
+    if (!this._reactor) return
+
+    this._reactorCore.rotation.y  += dt * 1.2
+    this._reactorCore.rotation.x  += dt * 0.5
+    this._reactorRingA.rotation.y += dt * 2.0
+    this._reactorRingB.rotation.z += dt * 1.4
+
+    const base      = 3 + (1 - reactorHpRatio) * 6
+    const pulse     = Math.sin(Date.now() * 0.003 * (1 + (1 - reactorHpRatio) * 4)) * 0.5 + 0.5
+    const intensity = base + pulse * 2
+
+    this._reactorCore.material.emissiveIntensity   = intensity
+    this._reactorRingA.material.emissiveIntensity  = intensity * 0.8
+    this._reactorRingB.material.emissiveIntensity  = intensity * 0.8
+    this._reactorPillar.material.emissiveIntensity = 1.5 + pulse * 2
+    this._reactorPillar.material.opacity           = 0.35 + pulse * 0.3
   }
 
   setPalette(idx) {

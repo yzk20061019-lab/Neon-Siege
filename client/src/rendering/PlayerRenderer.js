@@ -8,8 +8,10 @@ export class PlayerRenderer {
     this.localId = localId
     this.meshes = new Map()  // playerId -> group
 
-    this._geo = new THREE.CylinderGeometry(0.35, 0.25, 0.5, 8)
-    this._barrelGeo = new THREE.CylinderGeometry(0.06, 0.06, 0.5, 6)
+    this._headGeo  = new THREE.BoxGeometry(0.22, 0.18, 0.22)
+    this._torsoGeo = new THREE.BoxGeometry(0.45, 0.35, 0.30)
+    this._legGeo   = new THREE.BoxGeometry(0.14, 0.30, 0.14)
+    this._gunGeo   = new THREE.CylinderGeometry(0.055, 0.055, 0.52, 6)
   }
 
   update(players) {
@@ -22,24 +24,33 @@ export class PlayerRenderer {
       if (!group) {
         group = new THREE.Group()
         const isLocal = p.id === this.localId
-        const color = isLocal ? 0x00ffff : 0xff8800
-        const emissive = isLocal ? new THREE.Color(0, 0.5, 0.5) : new THREE.Color(0.5, 0.2, 0)
+        const color   = isLocal ? 0x00ffff : 0xff8800
+        const emissive = isLocal ? new THREE.Color(0, 0.6, 0.6) : new THREE.Color(0.6, 0.25, 0)
+        const base = { color, emissive, roughness: 0.25, metalness: 0.85 }
 
-        const bodyMat = new THREE.MeshStandardMaterial({
-          color, emissive, emissiveIntensity: 2, roughness: 0.3, metalness: 0.8
-        })
-        const body = new THREE.Mesh(this._geo, bodyMat)
-        body.position.y = 0.35
+        const torso = new THREE.Mesh(this._torsoGeo,
+          new THREE.MeshStandardMaterial({ ...base, emissiveIntensity: 2.2 }))
+        torso.position.y = 0.75
 
-        const barrelMat = new THREE.MeshStandardMaterial({
-          color: 0xffffff, emissive: new THREE.Color(color).multiplyScalar(0.5),
-          emissiveIntensity: 3
-        })
-        const barrel = new THREE.Mesh(this._barrelGeo, barrelMat)
-        barrel.rotation.x = Math.PI / 2
-        barrel.position.set(0, 0.35, -0.5)
+        const head = new THREE.Mesh(this._headGeo,
+          new THREE.MeshStandardMaterial({ ...base, emissiveIntensity: 1.8 }))
+        head.position.y = 1.05
 
-        group.add(body, barrel)
+        const legMat = new THREE.MeshStandardMaterial({ ...base, emissiveIntensity: 1.5 })
+        const legL = new THREE.Mesh(this._legGeo, legMat)
+        legL.position.set(-0.16, 0.42, 0)
+        const legR = new THREE.Mesh(this._legGeo, legMat)
+        legR.position.set( 0.16, 0.42, 0)
+
+        const gun = new THREE.Mesh(this._gunGeo, new THREE.MeshStandardMaterial({
+          color: 0xffffff,
+          emissive: new THREE.Color(color).multiplyScalar(0.6),
+          emissiveIntensity: 3.5, roughness: 0.1, metalness: 1.0
+        }))
+        gun.rotation.x = Math.PI / 2
+        gun.position.set(0, 0.75, -0.52)
+
+        group.add(torso, head, legL, legR, gun)
         this.scene.add(group)
         this.meshes.set(p.id, group)
       }
