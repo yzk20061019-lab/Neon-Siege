@@ -1,6 +1,7 @@
 [build]
 builder = "nixpacks"
+buildCommand = "cd server && npm install"
 
 [deploy]
-startCommand = "npm start"
+startCommand = "cd server && npm start"
 healthcheckPath = "/health"
