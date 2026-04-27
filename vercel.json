@@ -1,6 +1,4 @@
 {
   "framework": null,
-  "buildCommand": "npm run build",
-  "outputDirectory": "client/dist",
-  "installCommand": "echo skip"
+  "outputDirectory": "dist"
 }
