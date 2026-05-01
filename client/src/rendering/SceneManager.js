@@ -33,9 +33,9 @@ export class SceneManager {
 
     const bloom = new UnrealBloomPass(
       new THREE.Vector2(window.innerWidth, window.innerHeight),
-      1.8,   // strength
-      0.5,   // radius
-      0.75   // threshold — 只有亮于此的物体发光
+      0.8,   // strength
+      0.4,   // radius
+      0.85   // threshold — 只有亮于此的物体发光
     )
     this.composer.addPass(bloom)
     this.composer.addPass(new ShaderPass(ChromaticAberrationShader))

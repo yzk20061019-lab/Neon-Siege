@@ -29,14 +29,14 @@ export class PlayerRenderer {
         const base = { color, emissive, roughness: 0.25, metalness: 0.85 }
 
         const torso = new THREE.Mesh(this._torsoGeo,
-          new THREE.MeshStandardMaterial({ ...base, emissiveIntensity: 2.2 }))
+          new THREE.MeshStandardMaterial({ ...base, emissiveIntensity: 1.2 }))
         torso.position.y = 0.75
 
         const head = new THREE.Mesh(this._headGeo,
-          new THREE.MeshStandardMaterial({ ...base, emissiveIntensity: 1.8 }))
+          new THREE.MeshStandardMaterial({ ...base, emissiveIntensity: 1.0 }))
         head.position.y = 1.05
 
-        const legMat = new THREE.MeshStandardMaterial({ ...base, emissiveIntensity: 1.5 })
+        const legMat = new THREE.MeshStandardMaterial({ ...base, emissiveIntensity: 0.8 })
         const legL = new THREE.Mesh(this._legGeo, legMat)
         legL.position.set(-0.16, 0.42, 0)
         const legR = new THREE.Mesh(this._legGeo, legMat)
@@ -45,7 +45,7 @@ export class PlayerRenderer {
         const gun = new THREE.Mesh(this._gunGeo, new THREE.MeshStandardMaterial({
           color: 0xffffff,
           emissive: new THREE.Color(color).multiplyScalar(0.6),
-          emissiveIntensity: 3.5, roughness: 0.1, metalness: 1.0
+          emissiveIntensity: 1.8, roughness: 0.1, metalness: 1.0
         }))
         gun.rotation.x = Math.PI / 2
         gun.position.set(0, 0.75, -0.52)
