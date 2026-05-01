@@ -3,7 +3,7 @@ import { io } from 'socket.io-client'
 export class SocketClient {
   constructor() {
     const serverUrl = import.meta.env.VITE_SERVER_URL || ''
-    this.socket = io(serverUrl)
+    this.socket = io(serverUrl, { transports: ['websocket'] })
     this.localId = this.socket.id
     this._handlers = {}
 
