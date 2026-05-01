@@ -32,20 +32,6 @@ export function aStar(grid, start, goal) {
     const cur = open.pop()
 
     if (cur.x === goal.x && cur.y === goal.y) {
-      // 重建路径
-      const path = []
-      let k = key(cur.x, cur.y)
-      while (cameFrom.has(k)) {
-        const { x, y } = cameFrom.get(k)
-        path.unshift({ x: cur.x, y: cur.y })
-        // 沿 cameFrom 回溯
-        const prev = cameFrom.get(k)
-        path.unshift(prev)
-        k = key(prev.x, prev.y)
-        // 重建完整路径
-        break
-      }
-      // 正确重建
       return reconstructPath(cameFrom, cur)
     }
 
